@@ -1,0 +1,751 @@
+Select Statement
+Write a program to retrieve all the records present in the Book table and display those records in the 
+specified format using the SELECT select.
+
+
+import java.sql.*;
+import java.util.ResourceBundle; 
+public class DBConnection { 
+ public static Connection getConnection() throws ClassNotFoundException, SQLException { 
+ ResourceBundle rb = ResourceBundle.getBundle("oracle");
+ String url = rb.getString("db.url");
+ String username = rb.getString("db.username");
+ String password = rb.getString("db.password");
+ //fill your code here
+ Class.forName(" oracle.jdbc.driver.OracleDriver");
+ 
+ //step2 define connection url 
+ Connection con=DriverManager.getConnection(url,username,password); 
+ return con; 
+ } 
+
+
+
+public class Book { 
+ Integer id; 
+ String title; 
+ String category; 
+ String author; 
+ Double price; 
+ public Book() { 
+ super();
+ // TODO Auto-generated constructor stub
+ } 
+ public Book(Integer id, String title, String category, String author, Double price) { 
+ super();
+ this.id = id; 
+ this.title = title; 
+ this.category = category; 
+ this.author = author; 
+ this.price = price; 
+ } 
+public Integer getId() { 
+ return id; 
+ } 
+ public void setId(Integer id) { 
+ this.id = id; 
+ } 
+ public String getTitle() { 
+ return title; 
+ } 
+ public void setTitle(String title) { 
+ this.title = title; 
+ } 
+ public String getCategory() { 
+ return category; 
+ } 
+ public void setCategory(String category) { 
+ this.category = category; 
+} 
+ public String getAuthor() { 
+ return author; 
+ } 
+ public void setAuthor(String author) { 
+ this.author = author; 
+ } 
+ public Double getPrice() { 
+ return price; 
+ } 
+ public void setPrice(Double price) { 
+ this.price = price; 
+ } 
+ 
+} 
+
+
+
+
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.ResultSet; 
+import java.sql.SQLException; 
+import java.sql.Statement; 
+import java.util.ArrayList; 
+public class BookDAO { 
+ public ArrayList<Book> listBooks() throws ClassNotFoundException, SQLException{ 
+ ArrayList<Book> bookList = new ArrayList<Book>();
+ Connection con = DBConnection.getConnection();
+ try{ 
+ Statement st = con.createStatement();
+
+ResultSet r = st.executeQuery("select * from book");
+ while(r. next()){
+bookList.add(new Book(r. getInt(1 ),r. getString(2 ),r. getString(3 ),r. getString(4 ), r. getDouble(5 )));
+ } 
+ con.close();
+ }catch(Exception e ){
+ System.out.println(e );
+ } 
+ return bookList; 
+ } 
+} 
+
+
+
+import java.util.*;
+import java.io.*;
+public class Main { 
+ public static void main(String[] args) throws Exception
+ { 
+ ArrayList<Book> list = new ArrayList<Book>();
+ BookDAO b = new BookDAO();
+ list = b. listBooks();
+ System.out.println("List of Books");
+ System.out.format("%-5s %- 20s %- 20s %- 10s %s\n","Id","Title","Category","Author","Price");
+ for(Book book : list){
+ System.out.format("%-5s %- 20s %- 20s %-
+10s %s\n",book.getId(), book.getTitle(),book.getCategory(),book.getAuthor(),book.getPrice());
+ } 
+ } 
+} 
+----------------------------------
+
+Update details of Travel Classes
+Write a java program to update the details of Travel class available in the database and display the list of 
+travel class details in the descending order of names using JDBC drivers.
+
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.ResultSet; 
+import java.sql.SQLException; 
+import java.sql.Statement; 
+import java.util.ArrayList; 
+import java.util.List; 
+public class TravelClassDAO { 
+ ArrayList<TravelClass> listAllTravelClassess() throws ClassNotFoundException, SQLException { 
+ArrayList<TravelClass> travelClassList= new ArrayList<TravelClass>();
+try{ 
+ Connection con = DBConnection.getConnection();
+ Statement st = con.createStatement();
+ ResultSet r = st.executeQuery("Select name, description From travel_class Order by nam
+e DESC");
+ while(r. next()){
+ travelClassList.add(new TravelClass(r. getString(1 ), r. getString(2 )));
+ } 
+ con.close();
+ }catch(Exception e ){
+ System.out.println(e );
+ } 
+ return travelClassList; 
+ } 
+ public void updateDetail(String name, String description) throws ClassNotFoundException, SQLEx
+ception { 
+ try{ 
+Connection con = DBConnection.getConnection();
+ String query = String.format("Update travel_class set description = '%s' where name = '
+%s' ", description,name);
+ PreparedStatement p = con.prepareStatement(query);
+ p. execute();
+ con.close();
+ }catch(Exception e ){
+ System.out.println(e );
+ } 
+ } 
+} 
+
+
+
+import java.io.*;
+import java.sql.SQLException; 
+import java.util.ArrayList; 
+public class Main { 
+ public static void main(String args[]) throws Exception{ 
+ BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+ System.out.println("Enter the name of TravelClass :");
+ String name = br.readLine();
+ System.out.println("Enter the description to update :");
+ String description = br.readLine();
+ TravelClassDAO dao = new TravelClassDAO();
+ dao.updateDetail(name, description);
+ System.out.println("Updated List of Travel Classes");
+ System.out.format("%-25s %s\n","Name","Description");
+ ArrayList<TravelClass> list = new ArrayList<TravelClass>();
+ list = dao.listAllTravelClassess();
+ for(TravelClass t : list){
+ System.out.format("%-25s %s\n",t. getName(), t.getDescription());
+ } 
+ } 
+} 
+
+
+
+-----------------------------------
+
+Insert new Airport
+There is conjusted space in airport because of airplane's increased count.So Government decided to build 
+new airport in their country.So help the government by implementing the scenario using a program. Add 
+the details of new airport for a country.
+
+
+
+public class Airport { 
+ String iataAirportCode,name,city,country; 
+ public Airport() { 
+ super();
+ // TODO Auto-generated constructor stub
+ } 
+ public Airport(String iataAirportCode, String name, String city, String country) { 
+ super();
+ this.iataAirportCode = iataAirportCode; 
+ this.name = name; 
+ this.city = city; 
+ this.country = country; 
+ } 
+ public String getIataAirportCode() { 
+return iataAirportCode; 
+ } 
+ public void setIataAirportCode(String iataAirportCode) { 
+ this.iataAirportCode = iataAirportCode; 
+ } 
+ public String getName() { 
+ return name; 
+ } 
+
+public void setName(String name) { 
+ this.name = name; 
+} 
+ public String getCity() { 
+ return city; 
+ } 
+ public void setCity(String city) { 
+ this.city = city; 
+ } 
+ public String getCountry() { 
+ return country; 
+ } 
+ public void setCountry(String country) { 
+ this.country = country; 
+ } 
+}
+
+
+
+
+import java.sql.*;
+import java.util.ArrayList; 
+public class AirportDAO { 
+ public void insertAirport(Airport airportIns) throws ClassNotFoundException, SQLException{ 
+ 
+ try{ 
+ String query = String.format("insert into airport(iata_airport_code, name, city, count
+ry_name) VALUES('%s','%s','%s','%s')",airportIns.getIataAirportCode(),airportIns.getName(),airport
+Ins.getCity(),airportIns.getCountry());
+ Connection con = DBConnection.getConnection();
+ PreparedStatement p = con.prepareStatement(query);
+p. execute();
+ con.close();
+ }catch(Exception e ){
+ System.out.println(e );
+ } 
+ } 
+ public ArrayList<Airport> listAirport() throws ClassNotFoundException, SQLException{ 
+ ArrayList<Airport> list = new ArrayList<Airport>();
+ try{ 
+ Connection con = DBConnection.getConnection();
+ Statement st = con.createStatement();
+ ResultSet r = st.executeQuery("Select iata_airport_code, name, city, country_name from air
+port");
+while(r. next()){
+list.add(new Airport(r. getString(1 ), r. getString(2 ), r. getString(3 ), r. getString(4 )));
+ } 
+ con.close();
+ }catch(Exception e ){
+ System.out.println(e );
+ } 
+ 
+ return list; 
+ } 
+} 
+
+
+
+
+import java.io.*;
+import java.util.ArrayList; 
+public class Main { 
+ public static void main(String args[]) throws Exception{ 
+ BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+ String countryName,airportCode,airportName,city; 
+ System.out.println("Enter the Airport Code :");
+ airportCode = br.readLine();
+ System.out.println("Enter the Airport name :");
+ airportName = br.readLine();
+ System.out.println("Enter the City :");
+ city = br.readLine();
+ System.out.println("Enter the Country name :");
+ countryName = br.readLine();
+Airport airport = new Airport(airportCode, airportName, city, countryName);
+ AirportDAO a = new AirportDAO();
+ a. insertAirport(airport);
+ 
+ ArrayList<Airport> list = new ArrayList<Airport>();
+ list = a. listAirport();
+ System.out.format("%-10s %- 40s %- 10s %s\n","IATA Code","Name","City","Country");
+ for(Airport at : list){
+ System.out.format("%-10s %- 40s %-
+10s %s\n",at.getIataAirportCode() , at.getName() , at.getCity() , at.getCountry());
+ } 
+ 
+ } 
+} 
+ 
+
+
+
+---------------------------------------
+
+User-Delete
+The users who enter into 20 Ideas for Vision 2020 must be active and must keep posting their ideas.If the 
+administrator finds out that the user is not active the admin can delete the user record from the table. Help 
+the admin to delete the user record from the table.
+
+
+
+import java.util.Date; 
+import java.text.*;
+public class User { 
+ Integer id; 
+ String name; 
+ String email; 
+ String password; 
+ Integer age; 
+ String role; 
+ Date createdDate; 
+ String status; 
+ 
+ public User() { 
+ super();
+ // TODO Auto-generated constructor stub
+ } 
+
+ public User(Integer id, String name, String email, String password, Integer age, String role, 
+Date createdDate, 
+ String status) { 
+ super();
+ this.id = id; 
+ this.name = name; 
+ this.email = email; 
+ this.password = password; 
+ this.age = age; 
+ this.role = role; 
+ this.createdDate = createdDate; 
+ this.status = status; 
+ } 
+ public Integer getId() { 
+ return id; 
+ } 
+
+public void setId(Integer id) { 
+ this.id = id; 
+ } 
+ public String getName() { 
+ return name; 
+ } 
+ public void setName(String name) { 
+ this.name = name; 
+ } 
+ public String getEmail() { 
+ return email; 
+ } 
+ public void setEmail(String email) { 
+this.email = email; 
+ } 
+ public String getPassword() { 
+ return password; 
+ } 
+ public void setPassword(String password) { 
+ this.password = password; 
+ } 
+ public Integer getAge() { 
+ return age; 
+ } 
+
+public void setAge(Integer age) { 
+ this.age = age; 
+ } 
+ public String getRole() { 
+ return role; 
+ } 
+ public void setRole(String role) { 
+ this.role = role; 
+ } 
+
+public Date getCreatedDate() { 
+ return createdDate; 
+ } 
+ public void setCreatedDate(Date createdDate) { 
+ this.createdDate = createdDate; 
+ } 
+ public String getStatus() { 
+ return status; 
+ } 
+public void setStatus(String status) { 
+ this.status = status; 
+ } 
+ public String toString(){
+ SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+ return String.format("%-15s %- 15s %- 15s %- 15s %- 15s %- 15s %-
+15s %s",id,name,email,password,age,role,sdf.format(createdDate),status);
+ } 
+} 
+
+
+
+
+
+import java.text.*;
+import java.util.ArrayList; 
+import java.util.Date; 
+import java.util.List; 
+import java.sql.*;
+public class UserDAO{ 
+ public ArrayList<User> listUsers() throws Exception{ 
+ ArrayList<User> userList = new ArrayList<User>();
+ //fill your code here
+ Connection con = DBConnection.getConnection();
+ Statement st = con.createStatement();
+ ResultSet rs = st.executeQuery("select * from \ "user\"");
+ // SimpleDateFormat sdf = new SimpleDateFormat("dd-MON-YYYY");
+ while(rs.next()) { 
+ userList.add(new User(rs.getInt(1 ),rs.getString(2 ),rs.getString(3 ),rs.getString(4 ),rs.getInt
+(5 ),rs.getString(6 ),rs.getDate(7 ),rs.getString(8 )));
+
+} 
+ return userList; 
+ } 
+ public void deleteUser(Integer id) throws Exception{ 
+ //fill your code here
+ Connection con = DBConnection.getConnection();
+ Statement st = con.createStatement();
+ int updateCount=st.executeUpdate("delete from \"user\" where id ="+id);
+ } 
+ 
+} 
+
+
+import java.util.*;
+import java.io.*;
+import java.text.SimpleDateFormat; 
+public class Main{ 
+ 
+ public static void main(String [] args) throws Exception{ 
+ //fill your code here
+ Scanner sc = new Scanner(System.in);
+ System.out.println("Before the Delete");
+ System.out.format("%-15s %- 15s %- 15s %- 15s %- 15s %- 15s %-
+15s %s\n","Id","Name","Email","Password","Age","Role","CreatedDate","Status");
+ UserDAO udao = new UserDAO();
+ List<User> userList = udao.listUsers();
+ for(User x : userList) System.out.println(x );
+System.out.println("Enter the Id :");
+ udao.deleteUser(sc.nextInt());
+ System.out.println("After the Delete");
+ System.out.format("%-15s %- 15s %- 15s %- 15s %- 15s %- 15s %-
+15s %s\n","Id","Name","Email","Password","Age","Role","CreatedDate","Status");
+ 
+ userList = udao.listUsers();
+ for(User x : userList) System.out.println(x );
+ } 
+} 
+
+
+
+
+
+----------------------------------------------
+
+
+
+
+HTML- JS
+Write a JavaScript program to create a class named 'SuperHero' with name, alias &
+planet as members.
+Create instances of above class like superman and batman.
+Invoke the function WhoAmI which will be added to above class's prototype to display the name & other
+properties of
+the instance.
+Problem Constraints:
+Class name should be capitalized ‘SuperHero’.
+SuperHero should have the members like name, alias and planet.
+Use – function SuperHero(name, alias, planet) { ….. }
+It also has the prototype method WhoAmI( ) to display all the properties.
+Use new keyword to create instances like superman and batman .
+Invoke WhoAmI( ) method to display all the properties.
+Input and Output Format:
+Refer sample input and output for formatting specifications.
+Input corresponds to name, alias and planet separated by a comma.
+First line of input corresponds to Superman instance.
+Second line of input corresponds to BatMan instance.
+Output should display all the properties as mentioned below.
+Note: Input should be read from input.txt
+Input 1:
+Superman,Clark Kent,Krypton
+Batman,Bruce Wayne,Earth
+Output 1:
+Superman Clark Kent is from the planet Krypton
+Batman Bruce Wayne is from the planet Earth
+var fs = require('fs');
+var input=fs.readFileSync('input.txt').toString().trim().split('\n');
+var input1 = input[0].trim().split(',');
+var input2 = input[1].trim().split(',');
+//console.log(input1);
+//console.log(input2);
+//Fill your code here
+function SuperHero(name, alias, planet){
+ this.name = name;
+ this.alias = alias;
+ this.planet = planet;
+}
+SuperHero.prototype.WhoAmI = function(){
+ console.log(this.name + " " + this.alias + " is from the planet " + this.planet);
+}
+//console.log(input[0], input[1], input[2]);
+var Superman = new SuperHero(input1[0], input1[1], input1[2]);
+var BatMan = new SuperHero(input2[0], input2[1], input2[2]);
+Superman.WhoAmI();
+BatMan.WhoAmI();
+
+
+
+-----------------------------------------------
+
+
+Check Name Length
+Check the given user name length using Javascript class.
+Problem Description:
+1) Read input file ‘input.txt’
+2) Create class named as User.
+3) Inside the class create the argument as user name.
+4) Now create getter for name.
+5) Create the function checkNameLength() inside the class.
+6) Inside the function check the length of the user name.
+7) If the user name length is greater than 4 then, print the name as it is. Else print the message ‘Name is too
+short’
+
+6) Create object for the class using new Classname() and pass the input to the constructor.
+7) And call the object method, using object.methodName() to print the output.
+Input and Output Format:
+Refer to sample input and output.
+Input is user name.
+Output is user name.(If the length is greater than 4), Else ‘Name is too short’.
+Input:
+Harina
+Output:
+Harina
+Input:
+Jim
+Output:
+Name is too short
+
+
+var fs = require('fs');
+var input=fs.readFileSync('input.txt').toString().trim().split('\n');
+//fill your code
+class User {
+ constructor(name){
+ this.name = name;
+ }
+ getName(){
+ return this.name;
+ }
+}
+function checkNameLength(person){
+ let name = person.getName();
+ if (name.length > 4)
+ console.log(name);
+ else
+ console.log("Name is too short");
+ }
+var person = new User(input[0]);
+checkNameLength(person);
+
+
+
+
+
+----------------------------------------
+
+
+
+Ajax – XML Retrieval and Json Conversion
+Design a webpage which will get the xml details from a file and display it in a table. Then, display the Input
+fields to convert the particular booklist into a json format.
+Problem specification:
+• The file name should be index.html.
+• Get the details from the XML data and display it in the table.
+• Then displays the table data in the object notation format.
+UI Constraints :
+• Retrive the table data from xml during body onload and function name should be loadxml( ).
+• Have a heading text 'Book List' inside the 'h1' tag.
+• The xml file name should be booklist.xml.
+• Have a div tag with id “booklist”. And display the result table inside the div with id 'booklist'.
+• Parse the xml elements and display it in tabular form as shown in screenshot.
+• Have a button with id “convertToJSON” . While onclicking, the json format of entered book details should be
+displayed inside the div tag with id ‘jsonData’.
+• Kindly give the id’s and class name as per the constraints and screenshot
+
+
+
+
+
+h1 {
+ text-align: center;
+ padding-top: 50px;
+}
+.btn {
+ text-align: center;
+}
+#booklist {
+ display: flex;
+ justify-content: center;
+}
+table {
+ border: 1px solid black;
+ margin: 15px;
+ border-collapse: collapse;
+}
+tr:first-child {
+ background-color: lightblue;
+}
+tr:nth-child(even) {
+ background-color: #f2f2f2;
+}
+th {
+ border-bottom: 1px solid black;
+ text-align: left;
+ padding: 15px !important;
+}
+td {
+ padding: 15px;
+}
+#getBooklist {
+ padding: 10px;
+}
+.formData {
+ text-align: center;
+}
+.fields {
+ padding: 15px;
+}
+#convertToJSON {
+ margin-top: 15px;
+ padding: 10px;
+ border: 1px solid black;
+ border-radius: 5px;
+ background-color: lightblue;
+}
+#jsonData {
+ margin-top: 15px;
+}
+input {
+ border-radius: 5px;
+ padding: 7px;
+ border: 1px solid gray;
+}
+<html>
+<link rel="stylesheet" href="style.css">
+<head>
+ <script>
+ function showTable(bookList){
+ var result = document.getElementById("booklist");
+ result.innerHTML = "";
+ var table = document.createElement("table");
+ var tbody = document.createElement("tbody");
+ table.appendChild(tbody);
+ result.appendChild(table);
+ tbody.innerHTML = "<tr><th>Book Name</th><th>Author Name</th><th>Price</th></tr>";
+ for (var book of bookList) {
+ var name = book.getElementsByTagName("bookname")[0].textContent;
+ var author = book.getElementsByTagName("authorname")[0].textContent;
+ var price = book.getElementsByTagName("price")[0].textContent;
+
+ tbody.innerHTML +=
+ "<tr><td>" +
+ name +
+ "</td><td>" +
+ author +
+ "</td><td>" +
+ price +
+ "</td></tr>";
+ }
+ }
+ function getXml(){
+ var request = new XMLHttpRequest();
+ request.open("GET", "booklist.xml", true);
+ request.onreadystatechange = function () {
+ if (request.readyState == 4 && request.status == 200) {
+ var booklist = [];
+ var doc = request.responseXML;
+ var book = doc.getElementsByTagName("book");
+ for (var i = 0; i < book.length; i++) {
+ booklist.push(book[i]);
+ }
+ showTable(booklist);
+ }
+ };
+ request.send();
+ }
+ function tojson(){
+ var name = document.getElementById("name").value;
+ var author = document.getElementById("price").value;
+ var price = document.getElementById("availableQuantity").value;
+ var data = {
+ "Book Name": name,
+ "Author Name": author,
+ "Price": price
+ }
+ document.getElementById("jsonData").innerHTML = JSON.stringify(data);
+ }
+ </script>
+</head>
+<body onload="getXml()">
+ <h1>Book List</h1>
+ <div id="booklist"></div>
+ <div class="formData">
+ <label>Book Name : </label>
+ <input type="text" id="name" name="name" class="fields">
+ <br>
+ <br>
+ <label>Author Name : </label>
+ <input type="text" id="price" name="aname" class="fields">
+ <br>
+ <br>
+ <label>Book Price : </label>
+ <input type="text" id="availableQuantity" name="price" class="fields">
+ <br>
+ <br>
+ </div>
+ <center>
+ <button id="convertToJSON" onclick="tojson()">Convert to JSON</button>
+ </center>
+ <div id="jsonData"></div>
+</body>
+</html>
+
+
+
+
+-----------------------------------
+
+
+
