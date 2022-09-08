@@ -1,0 +1,27 @@
+<div class="main-container">
+  <div class="logout-block">
+    <a href="">logout</a>
+  </div>
+  <!-- Fill your code here -->
+  <div class="clr20"></div>
+  <section class="commonsection dashboardarea row">
+    <div class="card-group">
+      <div class="col-sm-12">
+        <div class="card">
+          <div *ngFor="let product of productCategory; index as i;">
+            <h1 class="main-heading color-bg" id="category-heading">{{product.category}}</h1>
+
+            <h3 class="color-bg">Name</h3>
+            <div id="category-name">{{product.category}}</div>
+
+            <h3 class="color-bg">Description</h3>
+            <div id="description">{{product.description}}</div>
+
+            <p class="color-bg">Image</p>
+            <img id="category-img" class="description" [src]="product.imageURL" alt="product-image" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

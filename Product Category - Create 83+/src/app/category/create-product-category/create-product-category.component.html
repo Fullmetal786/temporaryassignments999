@@ -1,0 +1,82 @@
+<div class="main-container">
+
+  <div class="logout-block">
+    <a href="/">logout</a>
+  </div>
+  <div class="clr20"></div>
+  <section class="commonsection dashboardarea row">
+    <div class="card-group">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="headline text-center">Create Product Category</div>
+          <div class="clr20"></div>
+
+
+          <!-- Fill your code here -->
+          <form [formGroup]="createProductCategory">
+            <div class="container">
+              <div class="container-item-1">
+                <div class="w-25 p-3 field-1">
+                  <!-- <label for="category-name">Category Name: </label>
+                      <input id="category-name" type="text" formControlName="categoryName"> -->
+                  <input mdbInput type="text" id="category" class="form-control " placeholder="Category Name"
+                    formControlName="category">
+
+                  <div *ngIf="f?.category.errors &&(f?.category.dirty || f?.category.touched)" class="alert-danger">
+                    <div id="categoryError" *ngIf="f?.category.errors.required">
+                      Category Name cannot be blank
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="field-2">
+                  <!-- <label for="image-path">Image Path: </label> -->
+                  <input mdbInput type="text" id="imageURL" class="form-control" placeholder="Image Path"
+                    formControlName="imageURL">
+                  <div *ngIf="f?.imageURL.errors &&(f?.imageURL.dirty || f?.imageURL.touched)" class="alert-danger">
+                    <div id="imageURLError" *ngIf="f?.imageURL.errors.required">
+                      Image URL cannot be blank
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="container-item-2">
+                <div class="field-3">
+                  <!-- <label for="description">Description: </label> -->
+                  <textarea class="form-control" mdbInput id="description" placeholder="Enter description"
+                    formControlName="description"></textarea>
+
+                  <div *ngIf="f?.description.errors &&(f?.description.dirty || f?.description.touched)"
+                    class="alert-danger">
+                    <div id="descriptionError" *ngIf="f?.description.errors.required">
+                      Description cannot be blank
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="container-item-3">
+              <input mdbInput type="checkbox" formControlName="isVisible" id="isVisible" class="form-check-input"
+                [ngClass]="{ 'is-invalid': submitted && f.acceptTerms.errors }" />
+              <label for="isVisible" class="form-check-label visible-label"> Is Visible</label>
+            </div>
+
+            <div class="button-group">
+              <button type="button" class="btn btn-light button-cancel" (click)="onCancel()">Cancel</button>
+              <button id="createProductCategory" type="submit" class="btn btn_primary" (click)="onSubmit()"
+                [disabled]="!createProductCategory.valid">Create</button>
+            </div>
+
+          </form>
+
+          <div class="clr"></div>
+        </div>
+        <div class="clr"></div>
+      </div>
+    </div>
+
+  </section>
+</div>

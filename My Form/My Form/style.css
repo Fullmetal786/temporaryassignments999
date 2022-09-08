@@ -1,0 +1,64 @@
+/* By MK */
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: aqua;
+}
+
+#container{
+    max-width: 600px;
+    /* border: 2px solid black; */
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.form-container{
+    background-color: beige;
+    /* padding: 10px 20px; */
+    padding: 30px;
+    color: black;
+}
+
+.form-container h2{
+    text-align: center;
+    margin: 10px;
+}
+
+.form-element{
+    margin: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* .form-element {
+    display: inline-block;
+} */
+
+.form-element input{
+    /* margin: 0px auto; */
+    display: inline-block;
+    border: 1px solid black;
+    width: 400px
+}
+
+.btn{
+    margin: 0px auto;
+    text-align: center;
+    display: block;
+    width: 100px;
+}
+
+
+
+.form-element label{
+    display: flex;
+    align-items: center;
+    width: 200px;
+}
+
+
